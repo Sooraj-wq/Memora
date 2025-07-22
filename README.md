@@ -35,5 +35,16 @@ Open Terminal/CMD inside the project folder and run:
 
 ## Contribution
 
-Memora is still in development, kindly open issues if you find any and open PR's to make your contribution!
+Memora is still in development, so expect bugs!
+
+Contributions are welcome!
+
+- Fork this repo
+- Make your changes in a new branch
+- Open a Pull Request
+
+Feel free to open issues for bugs or feature requests :)
+
+## License
+This project is licensed under the GNU General Public License v3.0 - see the LICENSE.md file for details.
 
