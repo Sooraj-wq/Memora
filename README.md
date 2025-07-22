@@ -1,6 +1,7 @@
 # Memora
 
-Memora is a fully encrypted note taking webapp focused on user privacy to completely let you have control over your notes!
+Memora is a fully responsive encrypted note taking webapp focused on user privacy which completely lets you have control over your notes!
+<br>
 ![ProjectScreenshot](./public/img.png)
 
 ## Dependencies
@@ -13,10 +14,7 @@ Memora is a fully encrypted note taking webapp focused on user privacy to comple
 
 Clone the project into your local system [www.github.com/Sooraj-wq/Memora](https://www.github.com/Sooraj-wq/Memora)
 <br>
-
 Create a .env file inside the **backend** directory like the .env.example
-
-<br>
 Then follow these steps:
 
 Open Terminal/CMD inside the project folder and run:
@@ -33,4 +31,8 @@ Open Terminal/CMD inside the project folder and run:
 * [Node.js](https://nodejs.org/en)
 * [Express.js](https://expressjs.com/)
 * [MongoDB](https://www.mongodb.com)
+
+## Contribution
+
+Memora is still in development, kindly open issues if you find any and open PR's to make your contribution!
 
