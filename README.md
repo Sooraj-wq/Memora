@@ -27,10 +27,10 @@ Open Terminal/CMD inside the project folder and run:
 
 ## Technologies Used
 
-* [React]
-* [Tailwind]
-* [Vite]
-* [Node.js]
-* [Express.js]
-* [MongoDB]
+* [React](https://react.dev/)
+* [Tailwind](https://tailwindcss.com/)
+* [Vite](https://vite.dev/)
+* [Node.js](https://nodejs.org/en)
+* [Express.js](https://expressjs.com/)
+* [MongoDB](https://www.mongodb.com)
 
