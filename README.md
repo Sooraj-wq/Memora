@@ -1,6 +1,8 @@
 # Memora
 
-Memora is a fully responsive encrypted note taking webapp focused on user privacy which completely lets you have control over your notes!
+Memora is a fully responsive encrypted note taking webapp focused on user privacy!
+
+Your data is end-to-end encrypted, that means no one can snoop in-between!
 <br>
 
 ![ProjectScreenshot](./public/img.png)
