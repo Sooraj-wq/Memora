@@ -1,11 +1,20 @@
-import { Navigate } from "react-router-dom";
 
-export default function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
+import { Navigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
+function ProtectedRoute({ children }) {
+  const { isAuthenticated } = useAuth();
+  
+  // Also check for the JWT token for an extra layer of validation
+  const token = localStorage.getItem('token');
+
+  if (isAuthenticated && token) {
+    // If the user has a password in memory AND a token, allow access
+    return children;
   }
-
-  return children;
+  
+  // Otherwise, redirect to the login page
+  return <Navigate to="/login" />;
 }
+
+export default ProtectedRoute;

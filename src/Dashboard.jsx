@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import SearchButton from "../public/SearchButton";
 import NotePopup from "./NotePopup";
+import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard(){
+
+    const { isAuthenticated, encryptNote, decryptNote, logout } = useAuth();
+    const navigate = useNavigate();
 
     const [showPopup,setShowPopup] = useState(false);
     const [notes, setNotes] = useState([]);
@@ -10,6 +15,11 @@ function Dashboard(){
 
 
     useEffect(() => {
+    if (!isAuthenticated) {
+        alert("Your session has expired. Please log in again.");
+        navigate("/login");
+        return;
+    }
     const fetchNotes = async () => {
       const token = localStorage.getItem("token");
 
@@ -26,13 +36,15 @@ function Dashboard(){
           }
         });
 
-        const data = await response.json();
+        const encryptedNotes = await response.json();
+        if (!response.ok) throw new Error(encryptedNotes.error);
+            
+        const decryptedNotes = encryptedNotes.map(note => ({
+               ...note,
+            content: decryptNote(note.content) || "⚠️ Decryption Failed"
+        }));
 
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to fetch notes");
-        }
-
-        setNotes(data); 
+        setNotes(decryptedNotes); 
       } catch (err) {
         alert("Error fetching notes: " + err.message);
       }
@@ -68,34 +80,33 @@ function Dashboard(){
 
 
     const handleCreate = async (note) => {
-
         const token = localStorage.getItem("token");
+        try {
+            // 1. CORRECTED: Encrypt the content before sending
+            const encryptedContent = encryptNote(note.content);
 
-            try {
             const response = await fetch("http://localhost:3000/api/postnote", {
                 method: "POST",
                 headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ title:note.title, content:note.content, color:note.color }) 
+                body: JSON.stringify({ 
+                    title: note.title, 
+                    content: encryptedContent, 
+                    color: note.color 
+                })
             });
 
-            const data = await response.json();
-
+            const savedNote = await response.json();
             if (!response.ok) {
-                throw new Error(data.error || "Failed to create note");
+                throw new Error(savedNote.error || "Failed to create note");
             }
-
-
-                console.log("Note created: ", note);
-
-                setNotes((prevNotes) => [...prevNotes, data]);
-                setShowPopup(false);
-
-            } catch (error) {
+            setNotes((prevNotes) => [...prevNotes, { ...savedNote, content: note.content }]);
+            setShowPopup(false);
+        } catch (error) {
             alert("Error: " + error.message);
-            }
+        }
     };
 
     const handleCancel = () => {
@@ -117,7 +128,7 @@ const handleClick = () => {
                     <div className="absolute left-1/2 transform -translate-x-1/2 text-pink-600">
                     Memora
                     </div>
-                    <div onClick={handleClick} className="text-pink-600 ml-auto hover:underline cursor-pointer text-[15px]">Back to Login</div>
+                    <div onClick={handleClick} className="text-pink-600 ml-auto hover:underline cursor-pointer text-[15px]">Sign Out</div>
             </div>
         </div>
 
@@ -126,7 +137,7 @@ const handleClick = () => {
         </div>
 
 
-        <button onClick={() => setShowPopup(true)} class="font-family-cabin cursor-pointer mt-10 ml-[37%] md:ml-[47%] text-sm font-bold font-inherit text-pink-600 bg-[#f8f8fd] px-4 py-2 rounded-full border-[4px] border-pink-600 shadow-[0px_4px_0px_#831843] active:relative active:top-1 active:border-pink-700 active:shadow-none">
+        <button onClick={() => setShowPopup(true)} className="font-family-cabin cursor-pointer mt-10 ml-[37%] md:ml-[47%] text-sm font-bold font-inherit text-pink-600 bg-[#f8f8fd] px-4 py-2 rounded-full border-[4px] border-pink-600 shadow-[0px_4px_0px_#831843] active:relative active:top-1 active:border-pink-700 active:shadow-none">
             Add Note
         </button>
         
